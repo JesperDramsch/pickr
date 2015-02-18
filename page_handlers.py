@@ -382,7 +382,7 @@ class AddImageHandler(PickThisPageRequest):
         img_obj.shorturl = shorturl
         img_obj.description = description
         img_obj.challenge = challenge
-        img_obj.challenge = imgtags
+        img_obj.imgtags = imgtags
         img_obj.pickstyle = pickstyle
         img_obj.permission = permission
         img_obj.rightsholder = rightsholder
