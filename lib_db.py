@@ -100,7 +100,7 @@ class ImageObject(db.Model):
     shorturl = db.StringProperty()
     description = db.StringProperty(default="")
     challenge = db.StringProperty(default="")
-    imgtags = db.StringProperty(default="")
+    imgtags = db.StrigListProperty(default=[])
     permission = db.StringProperty(default="")
     pickstyle = db.StringProperty(default="")
     rightsholder = db.StringProperty(default="")
