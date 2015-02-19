@@ -77,7 +77,7 @@
       </p>
       <p style="font-style:italic;">{{ img_obj.challenge }}</p>
       <p>{{ img_obj.description }}</p>
-      <p><strong>Tags:</strong> &nbsp; {{ img_obj.imgtags }}</p>
+      <p><strong>Tags:</strong> &nbsp; {{ img_obj.imgtags|join(', ') }}</p>
       <p><strong>Reference</strong> &nbsp;&nbsp; Pickthis.io user {{ img_obj.nickname }}. {{ img_obj.title }}, image no. <a href="http://pickthis.io/{{ img_obj.id }}">{{ img_obj.id }}</a>. Permission: {{ img_obj.rightsholder.strip(' .!?') }}, {{ img_obj.permission.strip(' .!?') }}.</p>
     </div><!-- End of well -->
 

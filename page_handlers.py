@@ -345,7 +345,7 @@ class AddImageHandler(PickThisPageRequest):
         shorturl = cgi.escape(self.request.get("shorturl"))
         description = cgi.escape(self.request.get("description"))
         challenge = cgi.escape(self.request.get("challenge"))
-        imgtags = cgi.escape(self.request.get("imgtags"))
+        imgtags = cgi.escape(self.request.get("imgtags")).split()
         pickstyle = self.request.get("pickstyle")
         permission = self.request.get("permission")
         rightsholder1 = cgi.escape(self.request.get("rightsholder1"))
