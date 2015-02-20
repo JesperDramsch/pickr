@@ -8,9 +8,10 @@
 
   <link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
 
+<script src="http://timschlechter.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+<script src="/static/js/lib/bootstrap3-typeahead.js"></script>
 <script src="/static/js/lib/validator.js"></script>
 <script src="/static/js/lib/bootbox.min.js"></script>
-<script src="http://timschlechter.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 
 
 <!-- okay, so this is pretty hacky -->
@@ -162,9 +163,18 @@
 		<div class="form-group">
           <label for="imgtags" class="col-sm-2 control-label">Tags</label>
           <div class="col-sm-10">
-          <input type="text" class="input-sm" id="imgtags" name="imgtags" data-role="tagsinput" value="{% if img_obj.imgtags %}{{ img_obj.imgtags|join(',') }}{% endif %}" />
+          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags" data-role="tagsinput" value="{% if img_obj.imgtags %}{{ img_obj.imgtags|join(',') }}{% else %}" placeholder="Enter tags to classify the image{% endif %}"/>
           </div>
         </div>
+<script>
+$('#imgtags').tagsinput({
+  typeahead: {
+    name: 'imgtags',
+    source: ['Seismic','MRI','Stack','Hydrocarbon','Biology','Geophysics','Geology','Faults','Other']
+  },
+  freeInput: false
+});
+</script>
         <div class="form-group">
           <label for="pickstyle" class="col-sm-2 control-label">Pick style</label>
           <div class="radio col-sm-10">
