@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
 
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script> 
+<!-- <script src="/static/js/lib/bootstrap-tagsinput.js"></script> ---!>
 <script src="/static/js/lib/bootstrap3-typeahead.js"></script>
 <script src="/static/js/lib/validator.js"></script>
 <script src="/static/js/lib/bootbox.min.js"></script>
@@ -163,14 +164,23 @@
 		<div class="form-group">
           <label for="imgtags" class="col-sm-2 control-label">Tags</label>
           <div class="col-sm-10">
-          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags"/>
+          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags"  value="{% if img_obj.imgtags %}{{ img_obj.imgtags|join(',') }}{% else %}" placeholder="Enter tags to classify the image{% endif %}" />
           </div>
         </div>
 <script>
 $('#imgtags').tagsinput({
+  tagClass: function(item) {
+    switch (item.continent) {
+      case 'Field'   : return 'label label-field';
+      case 'Data'  : return 'label label-data';
+    }
+  },
+  itemValue: 'text',
+  itemText: 'text',
   typeahead: {
     name: 'imgtags',
-    source: ['Seismic','MRI','Stack','Hydrocarbon','Biology','Geophysics','Geology','Faults','Other']
+    displayKey: 'text',
+    source: [{"value":1,"text":"Geophysics","continent":"Field"},{"value":2,"text":"Biology","continent":"Field"},{"value":3,"text":"Geology","continent":"Field"},{"value":4,"text":"Medicine","continent":"Field"},{"value":5,"text":"Seismic","continent":"Data"},{"value":6,"text":"Structure","continent":"Data"},{"value":7,"text":"MRI","continent":"Data"},{"value":8,"text":"Picture","continent":"Data"}]
   },
   freeInput: false
 });
