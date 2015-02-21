@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
 
-<script src="http://timschlechter.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+<script src="http://timschlechter.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script> 
 <script src="/static/js/lib/bootstrap3-typeahead.js"></script>
 <script src="/static/js/lib/validator.js"></script>
 <script src="/static/js/lib/bootbox.min.js"></script>
@@ -163,7 +163,7 @@
 		<div class="form-group">
           <label for="imgtags" class="col-sm-2 control-label">Tags</label>
           <div class="col-sm-10">
-          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags" data-role="tagsinput" value="{% if img_obj.imgtags %}{{ img_obj.imgtags|join(',') }}{% else %}" placeholder="Enter tags to classify the image{% endif %}"/>
+          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags"/>
           </div>
         </div>
 <script>
