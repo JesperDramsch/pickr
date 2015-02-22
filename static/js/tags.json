@@ -1,0 +1,9 @@
+[ {"value":1,"text":"Geophysics","category":"Field"},
+  {"value":2,"text":"Biology","category":"Field"},
+  {"value":3,"text":"Geology","category":"Field"},
+  {"value":4,"text":"Medicine","category":"Field"},
+  {"value":5,"text":"Seismic","category":"Data"},
+  {"value":6,"text":"Structure","category":"Data"},
+  {"value":7,"text":"MRI","category":"Data"},
+  {"value":8,"text":"Picture","category":"Data"}
+]

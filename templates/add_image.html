@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %} &middot; choose{% endblock %}
@@ -164,26 +165,49 @@
 		<div class="form-group">
           <label for="imgtags" class="col-sm-2 control-label">Tags</label>
           <div class="col-sm-10">
-          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags"  value="{% if img_obj.imgtags %}{{ img_obj.imgtags|join(',') }}{% else %}" placeholder="Enter tags to classify the image{% endif %}" />
+          <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags" />
           </div>
         </div>
 <script>
-$('#imgtags').tagsinput({
+
+var tags=[];
+var tagavail=[];
+var tagfield=$('#imgtags');
+{% if img_obj.imgtags %}
+  {% for imgtag in img_obj.imgtags %}
+    tagavail.push({{ imgtag }});
+  {% endfor %}
+{% endif %}
+$.getJSON('/static/js/tags.json', function(data){
+  $.each( data, function( key, val ){
+    tags.push(val);
+    return tags;
+  });
+})
+  .complete( function() {
+    for ( var j = 0; j < tagavail.length; j++) {
+      tagfield.tagsinput('add',tags[tagavail[j]-1]);
+    }
+  });
+
+tagfield.tagsinput({
   tagClass: function(item) {
-    switch (item.continent) {
+    switch (item.category) {
       case 'Field'   : return 'label label-field';
       case 'Data'  : return 'label label-data';
     }
   },
-  itemValue: 'text',
+  itemValue: 'value',
   itemText: 'text',
   typeahead: {
     name: 'imgtags',
     displayKey: 'text',
-    source: [{"value":1,"text":"Geophysics","continent":"Field"},{"value":2,"text":"Biology","continent":"Field"},{"value":3,"text":"Geology","continent":"Field"},{"value":4,"text":"Medicine","continent":"Field"},{"value":5,"text":"Seismic","continent":"Data"},{"value":6,"text":"Structure","continent":"Data"},{"value":7,"text":"MRI","continent":"Data"},{"value":8,"text":"Picture","continent":"Data"}]
+    source: tags
   },
   freeInput: false
 });
+
+
 </script>
         <div class="form-group">
           <label for="pickstyle" class="col-sm-2 control-label">Pick style</label>
