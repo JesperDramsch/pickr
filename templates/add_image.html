@@ -183,8 +183,7 @@ $.getJSON('/static/js/tags.json', function(data){
     tags.push(val);
     return tags;
   });
-})
-  .complete( function() {
+}).complete( function() {
     for ( var j = 0; j < tagavail.length; j++) {
       tagfield.tagsinput('add',tags[tagavail[j]-1]);
     }
