@@ -3,6 +3,11 @@
 {% block title %} &middot; choose{% endblock %}
 
 {% block content %}
+<head>
+
+<link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
+
+</head>
 
 <script>
 updateURL = function(){
@@ -11,6 +16,29 @@ updateURL = function(){
     $("#submit").click();
     });
 }
+
+var tags=[];
+$(document).ready(function() {
+$.getJSON('/static/js/tags.json', function(data){
+  $.each( data, function( key, val ){
+    tags.push("<a href='#' onClick='showOnlyTag("+val.value+")' class='label label-"+val.category.toLowerCase()+"'>"+val.text+"</a>");
+  })
+})
+  .complete( function() {
+    for ( var j = 0; j < tags.length; j++) {
+      $( tags[j] ).appendTo( "#imgtags" );
+      $( "#imgtags" ).append("&nbsp;");
+    }
+  })
+});
+
+function showOnlyTag(tag) {
+    $('.image').not('.imgtag-'+tag).toggle(500);
+}
+function showAllTag() {
+    $('.image').show();
+}
+
 </script>
 <!-- Page Content -->
 <div class="container">
@@ -42,12 +70,11 @@ updateURL = function(){
       </div>
     </div>
   </div><!-- end of row -->
-
   <!-- Build the gallery by looping over the images. -->
   <!-- A little tricky as we're changing the links and adding a badge if the user
        has interpreted that particular image. -->
   {% for img_obj in img_objs %}
-  <div id="image-{{img_obj.id}}">
+  <div id="image-{{img_obj.id}}" class="image {% if img_obj.imgtags %}imgtag-{{ img_obj.imgtags|join|replace(',','')|join(" imgtag-") }}{% endif %}">
     <div class="col-lg-3 col-md-4 col-xs-6">
       <a class="thumbnail"
         {% if login_url %} data-toggle="modal" data-target="#signInModel" 
@@ -86,6 +113,11 @@ updateURL = function(){
     </div>
   </div>
   {% endfor %}
+  <div class="row" style="margin-top:18px; margin-bottom:30px;">
+    <div class="col-md-8 col-sm-6 col-xs-6" id="imgtags">
+    &nbsp;
+    </div>
+  </div><!-- end of row -->
 
 
 <!-- Sign-in Alert Modal -->
