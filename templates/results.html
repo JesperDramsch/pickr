@@ -50,6 +50,31 @@
 <script src="/static/js/services.js"></script>
 <script src="/static/js/pick-drawing.js"></script>
 <script src="/static/js/results.js"></script>
+
+<script>
+$(document).ready(function() {
+    var tags=[];
+    var tagavail=[];
+    {% if img_obj.imgtags %}
+        {% for imgtag in img_obj.imgtags %}
+            tagavail.push({{ imgtag }});
+        {% endfor %}
+    {% endif %}
+    $.getJSON('/static/js/tags.json', function(data){
+        $.each( data, function( key, val ){
+            tags.push("<span class='label label-"+val.category.toLowerCase()+"'>"+val.text+"</span>");
+        })
+    })
+      .complete( function() {
+        for ( var j = 0; j < tagavail.length; j++) {
+            $( tags[tagavail[j]-1] ).appendTo( "#imgtags" );
+            $( "#imgtags" ).append("&nbsp;");
+        }
+    });
+});
+</script>
+
+
 </head>
 
 <div class="container">

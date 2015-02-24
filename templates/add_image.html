@@ -35,7 +35,43 @@
                 $("#rightsholder1-div").hide();
                 $("#rightsholder2-div").show();
         });
-    });
+
+        var tags=[];
+        var tagavail=[];
+        var tagfield=$('#imgtags');
+        {% if img_obj.imgtags %}
+            {% for imgtag in img_obj.imgtags %}
+                tagavail.push({{ imgtag }});
+            {% endfor %}
+        {% endif %}
+        $.getJSON('/static/js/tags.json', function(data){
+            $.each( data, function( key, val ){
+                tags.push(val);
+                return tags;
+            });
+        }).complete( function() {
+            for ( var j = 0; j < tagavail.length; j++) {
+                tagfield.tagsinput('add',tags[tagavail[j]-1]);
+            }
+        });
+
+        tagfield.tagsinput({
+            tagClass: function(item) {
+                switch (item.category) {
+                    case 'Field'   : return 'label label-field';
+                    case 'Data'  : return 'label label-data';
+                }
+            },
+            itemValue: 'value',
+            itemText: 'text',
+            typeahead: {
+                name: 'imgtags',
+                displayKey: 'text',
+                source: tags
+            },
+            freeInput: false
+        });
+   });
 </script>
 
 <!-- This is a trick to get Jinja vars into JS
@@ -168,46 +204,6 @@
           <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags" />
           </div>
         </div>
-<script>
-
-var tags=[];
-var tagavail=[];
-var tagfield=$('#imgtags');
-{% if img_obj.imgtags %}
-  {% for imgtag in img_obj.imgtags %}
-    tagavail.push({{ imgtag }});
-  {% endfor %}
-{% endif %}
-$.getJSON('/static/js/tags.json', function(data){
-  $.each( data, function( key, val ){
-    tags.push(val);
-    return tags;
-  });
-}).complete( function() {
-    for ( var j = 0; j < tagavail.length; j++) {
-      tagfield.tagsinput('add',tags[tagavail[j]-1]);
-    }
-  });
-
-tagfield.tagsinput({
-  tagClass: function(item) {
-    switch (item.category) {
-      case 'Field'   : return 'label label-field';
-      case 'Data'  : return 'label label-data';
-    }
-  },
-  itemValue: 'value',
-  itemText: 'text',
-  typeahead: {
-    name: 'imgtags',
-    displayKey: 'text',
-    source: tags
-  },
-  freeInput: false
-});
-
-
-</script>
         <div class="form-group">
           <label for="pickstyle" class="col-sm-2 control-label">Pick style</label>
           <div class="radio col-sm-10">

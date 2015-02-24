@@ -20,6 +20,30 @@
 <script src="/static/js/services.js"></script>
 <script src="/static/js/pick-drawing.js"></script>
 <script src="/static/js/pickpoint.js"></script>
+
+<script>
+$(document).ready(function() {
+    var tags=[];
+    var tagavail=[];
+    {% if img_obj.imgtags %}
+        {% for imgtag in img_obj.imgtags %}
+            tagavail.push({{ imgtag }});
+        {% endfor %}
+    {% endif %}
+    $.getJSON('/static/js/tags.json', function(data){
+        $.each( data, function( key, val ){
+            tags.push("<span class='label label-"+val.category.toLowerCase()+"'>"+val.text+"</span>");
+        })
+    })
+      .complete( function() {
+        for ( var j = 0; j < tagavail.length; j++) {
+            $( tags[tagavail[j]-1] ).appendTo( "#imgtags" );
+            $( "#imgtags" ).append("&nbsp;");
+        }
+    });
+});
+</script>
+
 </head>
 
 <div class="container"><!-- start of main container -->
@@ -81,27 +105,6 @@
       <p style="font-style:italic;">{{ img_obj.challenge }}</p>
       <p>{{ img_obj.description }}</p>
       <p><strong>Tags:</strong> <span id="imgtags">&nbsp;</span></p>
-<script>
-var tags=[];
-var tagavail=[];
-{% if img_obj.imgtags %}
-  {% for imgtag in img_obj.imgtags %}
-    tagavail.push({{ imgtag }});
-  {% endfor %}
-{% endif %}
-$.getJSON('/static/js/tags.json', function(data){
-  $.each( data, function( key, val ){
-    tags.push("<span class='label label-"+val.category.toLowerCase()+"'>"+val.text+"</span>");
-  })
-})
-  .complete( function() {
-    for ( var j = 0; j < tagavail.length; j++) {
-      $( tags[tagavail[j]-1] ).appendTo( "#imgtags" );
-      $( "#imgtags" ).append("&nbsp;");
-    }
-
-  });
-</script>
       <p><strong>Reference</strong> &nbsp;&nbsp; Pickthis.io user {{ img_obj.nickname }}. {{ img_obj.title }}, image no. <a href="http://pickthis.io/{{ img_obj.id }}">{{ img_obj.id }}</a>. Permission: {{ img_obj.rightsholder.strip(' .!?') }}, {{ img_obj.permission.strip(' .!?') }}.</p>
     </div><!-- End of well -->
 
