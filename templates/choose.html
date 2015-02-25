@@ -11,7 +11,12 @@
 <script src="/static/js/lib/bootstrap3-typeahead.js"></script>
 
 </head>
-
+<style>
+.inactive {
+    opacity: .4;
+    filter: alpha(opacity=40);
+}
+</style>
 <script>
 updateURL = function(){
   $.get("/BlobURL", function (data){
@@ -103,13 +108,29 @@ function hideAllTags(field) {
   <!-- Add input for Filters -->
   <div class="col-lg-3 col-md-4 col-xs-6">    
     <div class="form-group">
+        <span class="lead" title="Filter by Tags">
+          Filter by Tag
+        </span>
         <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags" />
         <div class="caption" style="height:140px;">
-          <span class="lead" title="Filter by Tags">
-            Filter by Tag
+          <a href="#" onclick="addAllTags('#imgtags')">Show All</a>&nbsp;-&nbsp;<a href="#" onclick="hideAllTags('#imgtags')">Hide All</a>
+          <br/><br/>
+          <span class="lead" title="Filter by Pickstyle">
+            Filter by Pickstyle
           </span>
           <br/>
-          <a href="#" onclick="addAllTags('#imgtags')">Show All</a>&nbsp;-&nbsp;<a href="#" onclick="hideAllTags('#imgtags')">Hide All</a>
+          <img onclick="$('.lines').toggle(500);$(this).toggleClass('inactive');" 
+             src="/static/img/icon-lines.png" 
+             style="width:3em; margin:8px; cursor:pointer;" 
+             title="Pick this image using lines" />
+          <img onclick="$('.polygon').toggle(500);$(this).toggleClass('inactive');" 
+             src="/static/img/icon-polygons.png" 
+             style="width:3em; margin:8px; cursor:pointer;" 
+             title="Pick this image using polygons" />
+          <img onclick="$('.points').toggle(500);$(this).toggleClass('inactive');" 
+             src="/static/img/icon-points.png" 
+             style="width:3em; margin:8px; cursor:pointer;" 
+             title="Pick this image using points" />
         </div>
       </div>
   </div><!-- end of row -->
@@ -117,7 +138,7 @@ function hideAllTags(field) {
   <!-- A little tricky as we're changing the links and adding a badge if the user
        has interpreted that particular image. -->
   {% for img_obj in img_objs %}
-  <div id="image-{{img_obj.id}}" class="image {% if img_obj.imgtags %}imgtag-{{ img_obj.imgtags|join|replace(',','')|join(" imgtag-") }}{% endif %}">
+  <div id="image-{{img_obj.id}}" class="{% if img_obj.imgtags %}imgtag-{{ img_obj.imgtags|join|replace(',','')|join(" imgtag-") }}{% endif %}{% if img_obj.pickstyle %} {{ img_obj.pickstyle }}{% endif %}">
     <div class="col-lg-3 col-md-4 col-xs-6">
       <a class="thumbnail"
         {% if login_url %} data-toggle="modal" data-target="#signInModel" 
