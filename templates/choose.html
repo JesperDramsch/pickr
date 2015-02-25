@@ -9,6 +9,7 @@
 <script src="http://timschlechter.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script> 
 <!-- <script src="/static/js/lib/bootstrap-tagsinput.js"></script> ---!>
 <script src="/static/js/lib/bootstrap3-typeahead.js"></script>
+<script src="/static/js/filtertags.js"></script>
 
 </head>
 <style>
@@ -24,7 +25,10 @@ updateURL = function(){
     $("#submit").click();
     });
 }
-
+var anim_delay = 500;
+var swLines   = true;
+var swPolygon = true;
+var swPoints  = true;
 var tags=[];
 $(document).ready(function() {
 var tagfield=$('#imgtags');
@@ -38,42 +42,30 @@ $.getJSON('/static/js/tags.json', function(data){
         tagfield.tagsinput('add',tags[j]);
     }
 });
-
-        tagfield.tagsinput({
-            tagClass: function(item) {
-                switch (item.category) {
-                    case 'Field'   : return 'label label-field';
-                    case 'Data'  : return 'label label-data';
-                }
-            },
-            itemValue: 'value',
-            itemText: 'text',
-            typeahead: {
-                name: 'imgtags',
-                displayKey: 'text',
-                source: tags
-            },
-            freeInput: false
-        });
-    tagfield.on('itemAdded', function(event) {
-            $('.imgtag-'+event.item.value).show(500);
-    });
-    tagfield.on('itemRemoved', function(event) {
-            $('.imgtag-'+event.item.value).hide(500);
-    });
+tagfield.tagsinput({
+    tagClass: function(item) {
+        switch (item.category) {
+            case 'Field'   : return 'label label-field';
+            case 'Data'  : return 'label label-data';
+        }
+    },
+    itemValue: 'value',
+    itemText: 'text',
+    typeahead: {
+        name: 'imgtags',
+        displayKey: 'text',
+        source: tags
+    },
+    freeInput: false
+});
+tagfield.on('itemAdded', function(event) {
+    filterTags('add','#imgtags')
+});
+tagfield.on('itemRemoved', function(event) {
+    filterTags('remove','#imgtags',event.item.value)
 });
 
-function addAllTags(field) {
-    for ( var j = 0; j < tags.length; j++) {
-        $(field).tagsinput('add',tags[j]);
-    }
-}
-function hideAllTags(field) {
-    for ( var j = 0; j < tags.length; j++) {
-        $('.imgtag-'+j).hide(500);
-    }
-    $(field).tagsinput('removeAll');
-}
+});
 </script>
 <!-- Page Content -->
 <div class="container">
@@ -113,24 +105,24 @@ function hideAllTags(field) {
         </span>
         <input type="text" class="input-sm typeahead" id="imgtags" name="imgtags" />
         <div class="caption" style="height:140px;">
-          <a href="#" onclick="addAllTags('#imgtags')">Show All</a>&nbsp;-&nbsp;<a href="#" onclick="hideAllTags('#imgtags')">Hide All</a>
+          <a href="#" onclick="filterTags('addAll','#imgtags')">All Tags</a>&nbsp;-&nbsp;<a href="#" onclick="filterTags('removeAll','#imgtags')">Hide All</a>
           <br/><br/>
-          <span class="lead" title="Filter by Pickstyle">
-            Filter by Pickstyle
+          <span class="lead" title="Toggle Pickstyles">
+            Toggle Pickstyles
           </span>
           <br/>
-          <img onclick="$('.lines').toggle(500);$(this).toggleClass('inactive');" 
+          <img onclick="filterTags('toggleLines',null);$(this).toggleClass('inactive');" 
              src="/static/img/icon-lines.png" 
              style="width:3em; margin:8px; cursor:pointer;" 
-             title="Pick this image using lines" />
-          <img onclick="$('.polygon').toggle(500);$(this).toggleClass('inactive');" 
+             title="Toggle picks using lines" />
+          <img onclick="filterTags('togglePolygon',null);$(this).toggleClass('inactive');" 
              src="/static/img/icon-polygons.png" 
              style="width:3em; margin:8px; cursor:pointer;" 
-             title="Pick this image using polygons" />
-          <img onclick="$('.points').toggle(500);$(this).toggleClass('inactive');" 
+             title="Toggle picks using polygons" />
+          <img onclick="filterTags('togglePoints',null);$(this).toggleClass('inactive');" 
              src="/static/img/icon-points.png" 
              style="width:3em; margin:8px; cursor:pointer;" 
-             title="Pick this image using points" />
+             title="Toggle picks using points" />
         </div>
       </div>
   </div><!-- end of row -->
